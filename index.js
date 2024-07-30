@@ -8,13 +8,13 @@ const boxes_height = 3; // boxes must be squares to be tic tac toe game, but you
 const fill = true; // whether to make your blot machine play the TicTacToe game with himself, or make the board blank - works when the boxes are squares
 const how_many_in_row_to_win = 3; // only needed when fill=true
 // randomness options (only needed when fill=true)
-const seed = 10342254;
+const seed = 1382253;
 
 // number of control points to draw the circle (O)
 // use at least 8 to make it look like something similar to a circle, and 16 to make it look like a real circle 
 const numPoints = 16;
 // number that is passed to bt.catmullRom()
-// there isn't really any big difference when changing the number, 5 looks the same as 10000000, you can make it 1 or 2 to see the difference
+// there isn't really any big difference when changing the number, 5 looks the same as 10000000, you can make it 1 or 2 to see difference
 const curvePoints = 5;
 
 bt.setRandSeed(seed);
@@ -94,6 +94,84 @@ for (let i = 0; i < boxes_height; i++) {
   board_array.push(temp_board_arr);
 }
 
+function someoneWon(board_array) {
+  // Check rows
+  for (let i = 0; i < boxes_height; i++) {
+    if (board_array[i][0] !== 0 && board_array[i].every(val => val === board_array[i][0])) {
+      return {
+        won: true,
+        type: board_array[i][0],
+        line: [
+          [0, i],
+          [boxes_width - 1, i]
+        ]
+      };
+    }
+  }
+
+  // Check columns
+  for (let i = 0; i < boxes_width; i++) {
+    let column = [];
+    for (let j = 0; j < boxes_height; j++) {
+      column.push(board_array[j][i]);
+    }
+    if (column[0] !== 0 && column.every(val => val === column[0])) {
+      return {
+        won: true,
+        type: column[0],
+        line: [
+          [i, 0],
+          [i, boxes_height - 1]
+        ]
+      };
+    }
+  }
+
+  // Check diagonals
+  let diag1 = [],
+    diag2 = [];
+  for (let i = 0; i < boxes_width; i++) {
+    diag1.push(board_array[i][i]);
+    diag2.push(board_array[i][boxes_width - i - 1]);
+  }
+  if (diag1[0] !== 0 && diag1.every(val => val === diag1[0])) {
+    return {
+      won: true,
+      type: diag1[0],
+      line: [
+        [0, 0],
+        [boxes_width - 1, boxes_height - 1]
+      ]
+    };
+  }
+  if (diag2[0] !== 0 && diag2.every(val => val === diag2[0])) {
+    return {
+      won: true,
+      type: diag2[0],
+      line: [
+        [0, boxes_height - 1],
+        [boxes_width - 1, 0]
+      ]
+    };
+  }
+
+  return { won: false };
+}
+
+function generate_win_line(line) {
+  const [start, end] = line;
+  const startX = start[0] * (drawable_size / boxes_width) + (drawable_size / boxes_width) / 2;
+  const startY = start[1] * (drawable_size / boxes_height) + (drawable_size / boxes_height) / 2;
+  const endX = end[0] * (drawable_size / boxes_width) + (drawable_size / boxes_width) / 2;
+  const endY = end[1] * (drawable_size / boxes_height) + (drawable_size / boxes_height) / 2;
+  return [
+    [
+      [startX, startY],
+      [endX, endY]
+    ]
+  ];
+}
+
 if (fill) {
   let x, y;
   for (let i = 0; i < boxes_width * boxes_height; i++) {
@@ -114,5 +192,11 @@ if (fill) {
     }
 
     console.log("wdwjh3", x, y, board_array) // the weird string at the beginning to be able to find it in the console
+
+    const winCheck = someoneWon(board_array);
+    if (winCheck.won) {
+      drawLines(generate_win_line(winCheck.line));
+      break;
+    }
   }
 }
