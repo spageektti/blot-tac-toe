@@ -84,18 +84,35 @@ function generate_o(x, y) {
   return [bt.catmullRom(controlPoints, curvePoints)];
 }
 
+let board_array = []; // to allow winning and not allow drawing two symbols on the same field
+// 0 - no symbol | 1 - x | 2 - o
+for (let i = 0; i < boxes_height; i++) {
+  let temp_board_arr = [];
+  for (let j = 0; j < boxes_width; j++) {
+    temp_board_arr.push(0);
+  }
+  board_array.push(temp_board_arr);
+}
+
 if (fill) {
   let x, y;
   for (let i = 0; i < boxes_width * boxes_height; i++) {
     x = bt.randIntInRange(1, boxes_width);
     y = bt.randIntInRange(1, boxes_height);
 
-    console.log("wdwjh3", x, y) // the weird string at the beginning to be able to find it in the console
+    while (board_array[y - 1][x - 1] != 0) {
+      x = bt.randIntInRange(1, boxes_width);
+      y = bt.randIntInRange(1, boxes_height);
+    }
 
     if (i % 2 == 0) {
+      board_array[y - 1][x - 1] = 1
       drawLines(generate_x(x, y))
     } else {
+      board_array[y - 1][x - 1] = 2
       drawLines(generate_o(x, y))
     }
+
+    console.log("wdwjh3", x, y, board_array) // the weird string at the beginning to be able to find it in the console
   }
 }
