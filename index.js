@@ -11,7 +11,11 @@ const how_many_in_row_to_win = 3; // only needed when fill=true
 const seed = 10342254;
 
 // number of control points to draw the circle (O)
-const numPoints = 8;
+// use at least 8 to make it look like something similar to a circle, and 16 to make it look like a real circle 
+const numPoints = 16;
+// number that is passed to bt.catmullRom()
+// there isn't really any big difference when changing the number, 5 looks the same as 10000000, you can make it 1 or 2 to see difference
+const curvePoints = 5;
 
 bt.setRandSeed(seed);
 const drawable_size = Math.min(width, height);
@@ -77,7 +81,7 @@ function generate_o(x, y) {
 
   controlPoints.push(controlPoints[0])
 
-  return [bt.catmullRom(controlPoints, 100)];
+  return [bt.catmullRom(controlPoints, curvePoints)];
 }
 
 if (fill) {
@@ -86,7 +90,7 @@ if (fill) {
     x = bt.randIntInRange(1, boxes_width);
     y = bt.randIntInRange(1, boxes_height);
 
-    console.log("wdwjh3", x, y)
+    console.log("wdwjh3", x, y) // the weird string at the beginning to be able to find it in the console
 
     if (i % 2 == 0) {
       drawLines(generate_x(x, y))
