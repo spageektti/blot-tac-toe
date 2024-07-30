@@ -8,7 +8,9 @@ const boxes_height = 3; // boxes must be squares to be tic tac toe game, but you
 const fill = true; // whether to make your blot machine play the TicTacToe game with himself, or make the board blank
 const how_many_in_row_to_win = 3; // only needed when fill=true
 // randomness options (only needed when fill=true)
+const seed = 10342234;
 
+bt.setRandSeed(seed);
 const drawable_size = Math.min(width, height);
 
 setDocDimensions(width, height);
@@ -36,3 +38,8 @@ for (let i = 1; i < boxes_height; i++) {
 bt.translate(board, [width / 2, height / 2], bt.bounds(board).cc)
 
 drawLines(board);
+
+// fill the board with X and O
+if (fill) {
+
+}
