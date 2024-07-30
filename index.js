@@ -14,7 +14,7 @@ const seed = 10342254;
 // use at least 8 to make it look like something similar to a circle, and 16 to make it look like a real circle 
 const numPoints = 16;
 // number that is passed to bt.catmullRom()
-// there isn't really any big difference when changing the number, 5 looks the same as 10000000, you can make it 1 or 2 to see difference
+// there isn't really any big difference when changing the number, 5 looks the same as 10000000, you can make it 1 or 2 to see the difference
 const curvePoints = 5;
 
 bt.setRandSeed(seed);
