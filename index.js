@@ -40,21 +40,40 @@ bt.translate(board, [width / 2, height / 2], bt.bounds(board).cc)
 drawLines(board);
 
 // fill the board with X and O
+function generate_x(x, y) {
+  return [
+    [
+      [x * drawable_size / boxes_width, y * drawable_size / boxes_width],
+      [x * drawable_size / boxes_width - drawable_size / boxes_width, y * drawable_size / boxes_width - drawable_size / boxes_width]
+    ],
+    [
+      [x * drawable_size / boxes_width, y * drawable_size / boxes_width - drawable_size / boxes_width],
+      [x * drawable_size / boxes_width - drawable_size / boxes_width, y * drawable_size / boxes_width]
+    ]
+  ];
+}
+
+function generate_o(x, y) {
+  return [bt.catmullRom([
+    [5, 0],
+    [10, 5],
+    [5, 10],
+    [0, 5]
+  ], 100)];
+}
+
 if (fill) {
   let x, y;
-  for (let i = 0; i < /*boxes_width * boxes_height*/ 1; i++) {
+  for (let i = 0; i < boxes_width * boxes_height; i++) {
     x = bt.randIntInRange(1, boxes_width);
     y = bt.randIntInRange(1, boxes_height);
 
-    drawLines([
-      [
-        [x * drawable_size / boxes_width, y * drawable_size / boxes_width],
-        [x * drawable_size / boxes_width - drawable_size / boxes_width, y * drawable_size / boxes_width - drawable_size / boxes_width]
-      ],
-      [
-        [x * drawable_size / boxes_width, y * drawable_size / boxes_width - drawable_size / boxes_width],
-        [x * drawable_size / boxes_width - drawable_size / boxes_width, y * drawable_size / boxes_width]
-      ]
-    ])
+    console.log("wdwjh3", x, y)
+
+    if (i % 2 == 0) {
+      drawLines(generate_x(x, y))
+    } else {
+      drawLines(generate_o(x, y))
+    }
   }
 }
